@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Undangan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 font-sans">
+
+    <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">Pengaturan Undangan Aqiqah</h1>
+        
+        <form id="adminForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Anak</label>
+                <input type="text" id="nama_anak" class="mt-1 w-full border border-gray-300 rounded-md p-2" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Orang Tua</label>
+                <input type="text" id="nama_ortu" class="mt-1 w-full border border-gray-300 rounded-md p-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Tanggal Acara</label>
+                <input type="text" id="tanggal_acara" placeholder="Contoh: Minggu, 12 April 2026" class="mt-1 w-full border border-gray-300 rounded-md p-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Waktu Acara</label>
+                <input type="text" id="waktu_acara" placeholder="Contoh: 09.00 WIT - Selesai" class="mt-1 w-full border border-gray-300 rounded-md p-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
+                <textarea id="alamat" rows="3" class="mt-1 w-full border border-gray-300 rounded-md p-2"></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Link Google Maps</label>
+                <input type="url" id="link_maps" class="mt-1 w-full border border-gray-300 rounded-md p-2">
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
+                Simpan Perubahan
+            </button>
+            <p id="status" class="text-center text-sm font-semibold mt-2 hidden"></p>
+        </form>
+    </div>
+
+    <script>
+        // GANTI DENGAN URL WEB APP GAS ANDA
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0TeL6XCTse6qVHSpAxtnhL1QNdCCyEBkbPchEMdRyTI6QeTYQa0UVCN-pu_vd3iFB9A/exec';
+
+        // Load data saat ini ketika halaman dibuka
+        window.onload = function() {
+            fetch(GAS_URL)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('nama_anak').value = data.nama_anak || '';
+                    document.getElementById('nama_ortu').value = data.nama_ortu || '';
+                    document.getElementById('tanggal_acara').value = data.tanggal_acara || '';
+                    document.getElementById('waktu_acara').value = data.waktu_acara || '';
+                    document.getElementById('alamat').value = data.alamat || '';
+                    document.getElementById('link_maps').value = data.link_maps || '';
+                });
+        };
+
+        // Simpan data baru
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSubmit');
+            const status = document.getElementById('status');
+            
+            btn.innerText = 'Menyimpan...';
+            btn.disabled = true;
+
+            const payload = {
+                nama_anak: document.getElementById('nama_anak').value,
+                nama_ortu: document.getElementById('nama_ortu').value,
+                tanggal_acara: document.getElementById('tanggal_acara').value,
+                waktu_acara: document.getElementById('waktu_acara').value,
+                alamat: document.getElementById('alamat').value,
+                link_maps: document.getElementById('link_maps').value
+            };
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                // Menggunakan text/plain untuk menghindari preflight CORS issue pada GAS
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    status.innerText = 'Data berhasil disimpan!';
+                    status.className = 'text-center text-sm font-semibold mt-2 text-green-600 block';
+                }
+            })
+            .catch(error => {
+                status.innerText = 'Gagal menyimpan data.';
+                status.className = 'text-center text-sm font-semibold mt-2 text-red-600 block';
+            })
+            .finally(() => {
+                btn.innerText = 'Simpan Perubahan';
+                btn.disabled = false;
+                setTimeout(() => { status.classList.add('hidden'); }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
