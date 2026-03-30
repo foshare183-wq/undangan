@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Aqiqah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-blue-50 text-gray-800 font-sans">
+
+    <div id="loading" class="fixed inset-0 bg-white flex items-center justify-center z-50">
+        <p class="text-xl font-semibold animate-pulse">Memuat Undangan...</p>
+    </div>
+
+    <div id="content" class="hidden max-w-md mx-auto bg-white min-h-screen shadow-lg overflow-hidden">
+        
+        <header class="text-center py-16 bg-blue-100 rounded-b-[50px]" data-aos="fade-down" data-aos-duration="1000">
+            <h1 class="text-2xl font-bold text-blue-800">Tasyakuran Aqiqah</h1>
+            <h2 id="view-nama" class="text-4xl font-extrabold mt-4 text-gray-900">Nama Anak</h2>
+        </header>
+
+        <section class="p-8 text-center" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+            <p class="text-gray-600 mb-2">Putra/Putri dari pasangan:</p>
+            <p id="view-ortu" class="font-semibold text-lg">Nama Orang Tua</p>
+        </section>
+
+        <section class="p-8 bg-blue-50 mx-4 rounded-xl text-center" data-aos="zoom-in" data-aos-duration="1000">
+            <h3 class="font-bold text-blue-800 mb-4">Waktu & Tempat</h3>
+            <p id="view-tanggal" class="font-semibold text-lg">Tanggal</p>
+            <p id="view-waktu" class="text-gray-600 mb-4">Waktu</p>
+            <p id="view-alamat" class="text-sm text-gray-600 mb-4">Alamat Lengkap</p>
+            <a id="view-maps" href="#" target="_blank" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition">Buka Google Maps</a>
+        </section>
+
+        <footer class="text-center py-10" data-aos="fade-up">
+            <p class="text-gray-500 italic">Merupakan suatu kehormatan bagi kami atas kehadiran Bapak/Ibu/Saudara/i.</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // GANTI DENGAN URL WEB APP GAS ANDA
+        const GAS_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_ID_ANDA/exec';
+
+        // Mengambil data dari GAS
+        fetch(GAS_URL)
+            .then(response => response.json())
+            .then(data => {
+                // Memasukkan data ke HTML
+                document.getElementById('view-nama').innerText = data.nama_anak || 'Nama Anak';
+                document.getElementById('view-ortu').innerText = data.nama_ortu || 'Nama Orang Tua';
+                document.getElementById('view-tanggal').innerText = data.tanggal_acara || 'Tanggal';
+                document.getElementById('view-waktu').innerText = data.waktu_acara || 'Waktu';
+                document.getElementById('view-alamat').innerText = data.alamat || 'Alamat';
+                
+                if(data.link_maps) {
+                    document.getElementById('view-maps').href = data.link_maps;
+                }
+
+                // Sembunyikan loading, tampilkan konten
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').classList.remove('hidden');
+                
+                // Refresh animasi AOS setelah DOM berubah
+                AOS.refresh();
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
