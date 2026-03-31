@@ -164,12 +164,18 @@
         // Load Data
         fetch(GAS_URL).then(r => r.json()).then(data => {
             if(data.foto_anak) document.getElementById('cover-page').style.backgroundImage = `url('${data.foto_anak}')`;
-            document.getElementById('view-nama').innerText = data.nama_anak || 'Nama Anak';
-            document.getElementById('view-ortu').innerText = data.nama_ortu || 'Keluarga Ibu Nia';
-            document.getElementById('view-tanggal').innerText = data.tanggal_acara || 'Tanggal';
-            document.getElementById('view-waktu').innerText = data.waktu_acara || 'Waktu';
-            document.getElementById('view-alamat').innerText = data.alamat || 'Alamat';
-            if(data.link_maps) document.getElementById('view-maps').href = data.link_maps;
+        // Gunakan fungsi formatTanggalIndonesia di sini
+        document.getElementById('view-nama').innerText = data.nama_anak || 'Nama Anak';
+        document.getElementById('view-ortu').innerText = data.nama_ortu || 'Keluarga Ibu Nia';
+        document.getElementById('view-tanggal').innerText = formatTanggalIndonesia(data.tanggal_acara);
+        document.getElementById('view-waktu').innerText = data.waktu_acara || '10:00 WIT';
+        document.getElementById('view-alamat').innerText = data.alamat || 'Alamat';
+        
+        if(data.link_maps) document.getElementById('view-maps').href = data.link_maps;
+        
+        document.getElementById('loading').style.display = 'none';
+        AOS.init({ once: true });
+    });
             
             document.getElementById('loading').style.display = 'none';
             AOS.init({ once: true });
