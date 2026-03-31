@@ -11,7 +11,7 @@
     <style>
         body { 
             font-family: 'Montserrat', sans-serif; 
-            overflow: hidden; /* Kunci scroll permanen selama auto-slide berjalan */
+            overflow: hidden; /* Dikunci dulu sampai undangan dibuka */
             background-color: #faf8f5; 
             color: #1a1a1a;
         }
@@ -20,7 +20,7 @@
         .font-sambung { font-family: 'Alex Brush', cursive; line-height: 1.2; }
         .letter-spacing-wide { letter-spacing: 0.15em; }
         
-        /* Pengaturan Cover */
+        /* Pengaturan Cover Halaman Depan */
         #cover-page {
             position: fixed; inset: 0; z-index: 50;
             background-size: cover; background-position: center;
@@ -35,27 +35,21 @@
         }
 
         /* Animasi Transisi Cover */
-        .zoom-blur-out { transform: scale(1.4); filter: blur(15px); opacity: 0; pointer-events: none; }
-
-        /* Animasi Cinematic Auto-Slide */
-        .cinematic-slide {
-            position: fixed; inset: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 2rem; text-align: center; z-index: 40;
-            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            opacity: 0; /* Tersembunyi di awal */
-            transform: scale(0.95); /* Sedikit kecil di awal */
-            pointer-events: none;
+        .zoom-blur-out { 
+            transform: scale(1.4); 
+            filter: blur(15px); 
+            opacity: 0; 
+            pointer-events: none; 
         }
-
-        .slide-enter { opacity: 1; transform: scale(1); }
-        .slide-leave { opacity: 0; transform: scale(1.3); /* Ini efek Zoom In & Fade Out */ }
+        
+        /* Efek garis estetik */
+        .divider { width: 1px; height: 50px; background-color: #cbd5e1; margin: 2rem auto; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-gray-800 selection:text-white">
 
     <div id="loading" class="fixed inset-0 bg-white flex items-center justify-center z-[60]">
-        <p class="text-sm tracking-widest uppercase animate-pulse">Menyiapkan Undangan...</p>
+        <p class="text-xs tracking-widest uppercase animate-pulse text-gray-500">Menyiapkan Undangan...</p>
     </div>
 
     <div id="cover-page" style="background-image: url('https://via.placeholder.com/800x1200?text=Foto+Anak');">
@@ -75,46 +69,58 @@
         </div>
     </div>
 
-    <div id="main-content" class="relative bg-[#faf8f5] hidden min-h-screen">
+    <div id="main-content" class="max-w-md mx-auto relative z-10 bg-[#faf8f5] hidden pb-20 overflow-x-hidden">
         
-        <div id="slide-1" class="cinematic-slide">
-            <p class="font-arab text-4xl text-gray-800 mb-8">السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
-            <p class="text-sm text-gray-600 leading-loose">
-                Dengan memohon Rahmat ALLAH S.W.T<br>
-                Kami sekeluarga mengundang Bapak/Ibu/Saudara/i pada acara
-            </p>
-        </div>
+        <section class="pt-24 px-8 text-center">
+            <div data-aos="fade-up" data-aos-duration="1200">
+                <p class="font-arab text-4xl text-gray-800 mb-6">السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
+                <p class="text-sm text-gray-600 leading-loose">
+                    Dengan memohon Rahmat ALLAH S.W.T<br>
+                    Kami sekeluarga bermaksud mengundang Bapak/Ibu/Saudara/i pada acara
+                </p>
+            </div>
+            <div class="divider" data-aos="fade-in" data-aos-delay="300"></div>
+        </section>
 
-        <div id="slide-2" class="cinematic-slide">
-            <h2 class="font-sambung text-6xl text-gray-800 mb-6">Tasyakuran<br>Aqiqah</h2>
-            <p class="text-xs uppercase tracking-widest text-gray-500 mb-4 mt-4">Putri Kami</p>
-            <h2 id="view-nama" class="font-sambung text-5xl text-gray-900">Nama Anak</h2>
-        </div>
-
-        <div id="slide-3-final" class="pt-24 pb-20 px-8 text-center transition-all duration-1500 ease-in-out opacity-0 hidden z-30">
+        <section class="px-8 text-center">
+            <h2 class="font-sambung text-6xl text-gray-800 mb-6" data-aos="zoom-in" data-aos-duration="1000">Tasyakuran<br>Aqiqah</h2>
             
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-12">
-                <p id="view-tanggal" class="text-sm font-semibold uppercase tracking-widest mb-2 text-gray-800">DD MONTH YYYY</p>
+            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-4 mt-8">Putri Kami</p>
+                <h2 id="view-nama" class="font-sambung text-5xl text-gray-900 mb-2">Nama Anak</h2>
+            </div>
+            <div class="divider" data-aos="fade-in" data-aos-delay="400"></div>
+        </section>
+
+        <section class="px-6 py-8">
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 text-center" data-aos="fade-up" data-aos-duration="1200">
+                
+                <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Waktu Pelaksanaan</p>
+                <p id="view-tanggal" class="text-sm font-semibold uppercase tracking-widest mb-1 text-gray-800">DD MONTH YYYY</p>
                 <p id="view-waktu" class="text-xs uppercase tracking-widest text-gray-500 mb-8">00.00 WIT - Selesai</p>
                 
-                <div class="w-12 h-[1px] bg-gray-300 mx-auto mb-8"></div>
+                <div class="w-12 h-[1px] bg-gray-200 mx-auto mb-8"></div>
                 
-                <p class="text-xs font-semibold uppercase tracking-widest text-gray-800 mb-2">Lokasi Acara</p>
-                <p id="view-alamat" class="text-xs text-gray-500 leading-relaxed mb-8">Alamat Lengkap Di Sini</p>
+                <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Lokasi Acara</p>
+                <p id="view-alamat" class="text-xs text-gray-600 leading-relaxed mb-8 px-4">Ternate Selatan, Maluku Utara</p>
                 
-                <a id="view-maps" href="#" target="_blank" class="inline-block bg-gray-800 text-white px-8 py-3 rounded-full text-xs uppercase tracking-widest hover:bg-gray-700 transition duration-300 shadow-md">
+                <a id="view-maps" href="#" target="_blank" class="inline-block bg-gray-800 text-white px-8 py-3 rounded-full text-xs uppercase tracking-widest hover:bg-gray-700 hover:scale-105 transition transform duration-300 shadow-md">
                     Buka Google Maps
                 </a>
             </div>
+        </section>
 
-            <p class="text-sm text-gray-600 leading-loose mb-10">
-                Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.
-            </p>
-            <p class="font-arab text-3xl text-gray-800 mb-10">وَالسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
-            
-            <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Kami yang berbahagia,</p>
-            <p id="view-ortu" class="font-semibold text-gray-900 text-lg">Nama Orang Tua</p>
-        </div>
+        <section class="px-8 pt-10 text-center">
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <p class="text-sm text-gray-600 leading-loose mb-10">
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
+                </p>
+                <p class="font-arab text-3xl text-gray-800 mb-10">وَالسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
+                
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Kami yang berbahagia,</p>
+                <p id="view-ortu" class="font-semibold text-gray-900 text-lg">Keluarga Ibu Nia</p>
+            </div>
+        </section>
 
     </div>
 
@@ -123,7 +129,7 @@
         // ⚠️ GANTI DENGAN URL WEB APP GAS ANDA ⚠️
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0TeL6XCTse6qVHSpAxtnhL1QNdCCyEBkbPchEMdRyTI6QeTYQa0UVCN-pu_vd3iFB9A/exec';
 
-        // 1. Ambil Nama Tamu
+        // 1. Ambil Nama Tamu dari URL Parameter (?to=Nama)
         const urlParams = new URLSearchParams(window.location.search);
         const guestName = urlParams.get('to');
         if (guestName) document.getElementById('nama-tamu').innerText = guestName;
@@ -132,78 +138,49 @@
         fetch(GAS_URL)
             .then(response => response.json())
             .then(data => {
+                // Set Background Cover
                 if(data.foto_anak) document.getElementById('cover-page').style.backgroundImage = `url('${data.foto_anak}')`;
                 
+                // Isi Konten Undangan
                 document.getElementById('view-nama').innerText = data.nama_anak || 'Nama Anak';
-                document.getElementById('view-ortu').innerText = data.nama_ortu || 'Nama Orang Tua';
+                document.getElementById('view-ortu').innerText = data.nama_ortu || 'Keluarga Ibu Nia';
                 document.getElementById('view-tanggal').innerText = data.tanggal_acara || 'Tanggal Acara';
                 document.getElementById('view-waktu').innerText = data.waktu_acara || 'Waktu Acara';
                 document.getElementById('view-alamat').innerText = data.alamat || 'Alamat Lengkap';
                 if(data.link_maps) document.getElementById('view-maps').href = data.link_maps;
 
+                // Sembunyikan Loading
                 document.getElementById('loading').style.display = 'none';
+                
+                // Inisialisasi awal AOS (Hanya untuk Cover)
                 AOS.init({ once: true }); 
             })
             .catch(err => {
-                console.error('Error:', err);
-                document.getElementById('loading').innerHTML = '<p class="text-red-500">Gagal memuat data.</p>';
+                console.error('Error fetching data:', err);
+                document.getElementById('loading').innerHTML = '<p class="text-red-500 text-xs">Gagal memuat data.</p>';
             });
 
-        // 3. Sistem Cinematic Auto-Slide
+        // 3. Fungsi Transisi Buka Undangan
         function bukaUndangan() {
             const cover = document.getElementById('cover-page');
             const mainContent = document.getElementById('main-content');
-            const s1 = document.getElementById('slide-1');
-            const s2 = document.getElementById('slide-2');
-            const sFinal = document.getElementById('slide-3-final');
-
-            // Hapus cover dengan zoom & blur
+            
+            // Tambahkan kelas animasi zoom & blur pada cover
             cover.classList.add('zoom-blur-out');
+            
+            // Tampilkan struktur konten utama (masih di balik cover yang sedang menghilang)
             mainContent.classList.remove('hidden');
-
-            setTimeout(() => {
-                cover.style.display = 'none';
-
-                // MULAI SLIDE 1 (Masuk)
-                s1.classList.add('slide-enter');
+            
+            // Buka kunci scroll agar tamu bisa mulai menggulir ke bawah
+            document.body.style.overflow = 'auto';
+            
+            // Tunggu animasi cover selesai (1.5 detik)
+            setTimeout(() => { 
+                cover.style.display = 'none'; // Buang cover dari memori layar
                 
-                setTimeout(() => {
-                    // SLIDE 1 (Keluar: Zoom In & Fade Out)
-                    s1.classList.remove('slide-enter');
-                    s1.classList.add('slide-leave');
-
-                    // MULAI SLIDE 2 (Masuk)
-                    setTimeout(() => {
-                        s2.classList.add('slide-enter');
-
-                        setTimeout(() => {
-                            // SLIDE 2 (Keluar: Zoom In & Fade Out)
-                            s2.classList.remove('slide-enter');
-                            s2.classList.add('slide-leave');
-
-                            // MUNCULKAN SLIDE FINAL
-                            setTimeout(() => {
-                                // Sembunyikan elemen slide 1 & 2 dari DOM agar tidak menghalangi klik
-                                s1.style.display = 'none';
-                                s2.style.display = 'none';
-
-                                sFinal.classList.remove('hidden');
-                                // Jeda sedikit agar transisi opacity bekerja setelah display block
-                                setTimeout(() => {
-                                    sFinal.classList.replace('opacity-0', 'opacity-100');
-                                    // Buka kunci scroll jika layar HP kecil dan butuh scroll ke bawah
-                                    document.body.style.overflow = 'auto'; 
-                                }, 50);
-
-                            }, 1000); // Waktu Slide 2 menghilang
-
-                        }, 3500); // Durasi Slide 2 Tampil
-
-                    }, 1000); // Waktu Slide 1 menghilang
-
-                }, 3500); // Durasi Slide 1 Tampil
-
-            }, 1200); // Waktu Cover menghilang
+                // ⚠️ PENTING: Refresh AOS setelah cover hilang agar animasi scroll terbaca dengan presisi
+                AOS.refresh(); 
+            }, 1500);
         }
     </script>
 </body>
