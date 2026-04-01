@@ -14,13 +14,12 @@
             <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
                 <h2 class="text-sm font-bold text-blue-800 mb-3">Media (Foto & Musik)</h2>
                 <div class="mb-3">
-                    <label class="block text-sm font-medium text-gray-700">Link URL Foto Anak</label>
-                    <input type="url" id="foto_anak" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md p-2">
+                    <label class="block text-sm font-medium text-gray-700">Nama File Foto Anak</label>
+                    <input type="text" id="foto_anak" placeholder="contoh: foto-bayi.jpg" class="mt-1 w-full border border-gray-300 rounded-md p-2">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Link Musik MP3</label>
-                    <input type="url" id="link_musik" placeholder="https://.../lagu.mp3" class="mt-1 w-full border border-gray-300 rounded-md p-2">
-                    <p class="text-[10px] text-gray-500 mt-1">*Gunakan direct link .mp3 dari GitHub atau Google Drive.</p>
+                    <label class="block text-sm font-medium text-gray-700">Nama File Musik MP3</label>
+                    <input type="text" id="link_musik" placeholder="contoh: sholawat.mp3" class="mt-1 w-full border border-gray-300 rounded-md p-2">
                 </div>
             </div>
 
@@ -55,11 +54,12 @@
     </div>
 
     <script>
-        // ⚠️ GANTI DENGAN URL WEB APP GAS ⚠️
+        // ⚠️ GANTI DENGAN URL WEB APP GAS YANG BARU DIDEPLOY ⚠️
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0TeL6XCTse6qVHSpAxtnhL1QNdCCyEBkbPchEMdRyTI6QeTYQa0UVCN-pu_vd3iFB9A/exec'; 
 
         window.onload = function() {
-            fetch(GAS_URL).then(r => r.json()).then(data => {
+            fetch(GAS_URL).then(r => r.json()).then(res => {
+                const data = res.settings; // Ambil objek settings
                 document.getElementById('foto_anak').value = data.foto_anak || '';
                 document.getElementById('link_musik').value = data.link_musik || '';
                 document.getElementById('nama_anak').value = data.nama_anak || '';
@@ -78,14 +78,17 @@
             btn.innerText = 'Menyimpan...'; btn.disabled = true;
 
             const payload = {
-                foto_anak: document.getElementById('foto_anak').value,
-                link_musik: document.getElementById('link_musik').value,
-                nama_anak: document.getElementById('nama_anak').value,
-                nama_ortu: document.getElementById('nama_ortu').value,
-                tanggal_acara: document.getElementById('tanggal_acara').value,
-                waktu_acara: document.getElementById('waktu_acara').value,
-                alamat: document.getElementById('alamat').value,
-                link_maps: document.getElementById('link_maps').value
+                action: 'save_settings', // Penanda untuk GAS
+                data: {
+                    foto_anak: document.getElementById('foto_anak').value,
+                    link_musik: document.getElementById('link_musik').value,
+                    nama_anak: document.getElementById('nama_anak').value,
+                    nama_ortu: document.getElementById('nama_ortu').value,
+                    tanggal_acara: document.getElementById('tanggal_acara').value,
+                    waktu_acara: document.getElementById('waktu_acara').value,
+                    alamat: document.getElementById('alamat').value,
+                    link_maps: document.getElementById('link_maps').value
+                }
             };
 
             fetch(GAS_URL, {
